@@ -1,26 +1,26 @@
 <?php
-include '../dbconfig.php';
-class User {
-    private $email;
-    private $password;
-    private $role;
-    private $isAuthenticated = false;
+include '../../dbconfig.php';
+ class User {
+    protected $email;
+    protected $password;
+    protected $role;
+    protected  $isAuthenticated = false;
   
     public function __construct($email, $password) {
       $this->email = $email;
       $this->password = $password;
-      try {
+      //try {
         $connexion=$GLOBALS['connexion'];
-        $stmt = $connexion->prepare('SELECT * FROM users WHERE email = ? AND password = ?');
-        $stmt->execute([$this->email, $this->password]);
+        $stmt = $connexion->prepare('SELECT * FROM users WHERE email = ? ');
+        $stmt->execute([$this->email]);
         $row = $stmt->fetch();
-        if ($row) {
+        if ($row && password_verify($this->password, $row['password'])) {
           $this->isAuthenticated = true;
           $this->role = $row['role'];
-        }
+       // }
 
-      } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
+      //} catch (PDOException $e) {
+        //echo "Connection failed: " . $e->getMessage();
       }
     }
     
@@ -44,28 +44,43 @@ class User {
       return $this->role;
     }
 
-    public function register()
+    public function createAccount()
     {
       if($this->isAuthenticated){
         return false;}
       else{
-          try {
+          //try {
             $connexion=$GLOBALS['connexion'];
-            $stmt = $connexion->prepare('INSERT INTO users (email, password) VALUES (?, ?)');
-            $stmt->execute([$this->email, $this->password]);
+            $user_id=mt_rand(1,999999999);
+            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+            $stmt = $connexion->prepare('INSERT INTO users (user_id,email, password) VALUES (?, ?,?)');
+            $stmt->execute([$user_id,$this->email, $this->password]);
+            $_SESSION["tmpUser"]["email"]=$this->email;
+            $_SESSION["tmpUser"]["password"]=$this->password;
+            $_SESSION["tmpUser"]["user_id"]=$user_id;
             return true;
-          } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-            return false;
-          }
+          //} catch (PDOException $e) {
+            //echo "Connection failed: " . $e->getMessage();
+            //return false;
+          //}
       }
     }
-    
-    // Checks if user is an admin
-    public function isAdmin() {
-      return ($this->role === 'admin');
+    public function completeUserInfo($uname, $phone, $role)
+    {
+        //try {
+            $connexion = $GLOBALS['connexion'];
+            $stmt = $connexion->prepare('UPDATE users SET username=?, phone_number=?, role=? WHERE email=?');
+            $stmt->execute([$uname, $phone, $role, $_SESSION["tmpUser"]["email"]]);
+            return true;
+        //} catch (PDOException $e) {
+            //echo "Connection failed: " . $e->getMessage();
+            //return false;
+        //}
     }
-  }
+
+}
+
+
 
 
 
