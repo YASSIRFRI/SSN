@@ -1,7 +1,7 @@
 <?php
 session_start();
 require '../models/User.php';
-require '../dbconfig.php';
+require '../../dbconfig.php';
 class LoginController
 {
     private $user;
@@ -14,9 +14,12 @@ class LoginController
         if ($this->user->isAuthenticated()) {
             $_SESSION["user"]=$this->user->getemail();
             $_SESSION["role"]=$this->user->getRole();
-            header("location: ../views/Dashboard.php");
+            if($_SESSION["role"]=='user')
+            header("location: ../views/UserDashboard.php");
+            else
+            header("location: ../views/ArtisanDashboard.php");
         } else {
-            echo "Wrong username or password";
+            header("location: ../views/Login.php?error=1");
         }
     }
 }
