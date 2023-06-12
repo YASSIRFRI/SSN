@@ -16,6 +16,10 @@
         <label for="phoneNumber">Phone Number</label>
         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
       </div>
+        <div class="form-group">
+          <label for="profilePicture">Profile Picture</label>
+          <input type="file" class="form-control-file" id="profilePicture" name="profilePicture" >
+        </div>
       <div class="form-group">
         <label for="role">Role</label>
         <div class="form-check">
@@ -43,10 +47,6 @@
         <div class="form-group">
           <label for="description">Description</label>
           <textarea class="form-control" id="description" name="description" placeholder="Enter a description of your company" rows="4"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="profilePicture">Profile Picture</label>
-          <input type="file" class="form-control-file" id="profilePicture" name="profilePicture" >
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>

@@ -35,7 +35,14 @@ class RegistrationController
         //var_dump($extension);
         if($test)
         {
-            header("Location: ../views/Dashboard.php");
+            if($this->userModel instanceof Artisan)
+            {
+                header("Location: ../views/ArtisanProfile.php");
+            }
+            else
+            {
+                header("Location: ../views/UserDashboard.php");
+            }
 
         } else{
             header("Location: ../views/Login.php/?error=1");

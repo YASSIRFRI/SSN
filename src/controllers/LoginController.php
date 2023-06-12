@@ -13,6 +13,7 @@ class LoginController
     {
         if ($this->user->isAuthenticated()) {
             $_SESSION["user"]=$this->user->getemail();
+            $_SESSION["user_id"]=$this->user->getId();
             $_SESSION["role"]=$this->user->getRole();
             if($_SESSION["role"]=='user')
             header("location: ../views/UserDashboard.php");

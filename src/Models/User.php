@@ -3,6 +3,7 @@ include '../../dbconfig.php';
  class User {
     protected $email;
     protected $password;
+    protected $user_id;
     protected $role;
     protected  $isAuthenticated = false;
   
@@ -16,7 +17,9 @@ include '../../dbconfig.php';
         $row = $stmt->fetch();
         if ($row && password_verify($this->password, $row['password'])) {
           $this->isAuthenticated = true;
+          $this->user_id = $row['user_id'];
           $this->role = $row['role'];
+
        // }
 
       //} catch (PDOException $e) {
@@ -27,6 +30,10 @@ include '../../dbconfig.php';
     // Getter for email
     public function getemail() {
       return $this->email;
+    }
+
+    public function getId() {
+      return $this->user_id;
     }
 
     // Getter for password
